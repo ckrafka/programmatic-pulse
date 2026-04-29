@@ -1,619 +1,101 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Programmatic Pulse | April 2026</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-      background: #f0f4f0;
-      min-height: 100vh;
-      padding: 40px 20px;
-    }
-
-    .wrapper {
-      max-width: 700px;
-      margin: 0 auto;
-    }
-
-    /* ── HEADER ── */
-    .header {
-      background: #2CA01C;
-      border-radius: 20px 20px 0 0;
-      padding: 48px 48px 40px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .header::before {
-      content: '';
-      position: absolute;
-      top: -60px; right: -60px;
-      width: 220px; height: 220px;
-      background: rgba(255,255,255,0.07);
-      border-radius: 50%;
-    }
-
-    .header::after {
-      content: '';
-      position: absolute;
-      bottom: -80px; left: -40px;
-      width: 260px; height: 260px;
-      background: rgba(0,0,0,0.06);
-      border-radius: 50%;
-    }
-
-    .header .pill {
-      display: inline-block;
-      background: rgba(255,255,255,0.2);
-      color: #ffffff;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 2.5px;
-      text-transform: uppercase;
-      padding: 5px 16px;
-      border-radius: 20px;
-      margin-bottom: 18px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .header h1 {
-      font-size: 52px;
-      font-weight: 900;
-      color: #ffffff;
-      letter-spacing: -1.5px;
-      line-height: 1;
-      margin-bottom: 10px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .header h1 span {
-      color: #FFE01B;
-    }
-
-    .header .date {
-      color: rgba(255,255,255,0.75);
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 1px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .header .byline {
-      color: rgba(255,255,255,0.85);
-      font-size: 13px;
-      font-weight: 500;
-      margin-top: 8px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .header .divider {
-      width: 48px;
-      height: 3px;
-      background: rgba(255,255,255,0.4);
-      border-radius: 2px;
-      margin: 18px auto 0;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* ── BODY WRAPPER ── */
-    .body {
-      background: #ffffff;
-      padding: 36px 40px;
-      border-radius: 0 0 20px 20px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-    }
-
-    /* ── SECTION LABEL ── */
-    .section-label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: #2CA01C;
-      margin-bottom: 16px;
-      margin-top: 40px;
-    }
-
-    .section-label:first-child {
-      margin-top: 0;
-    }
-
-    .section-label::after {
-      content: '';
-      flex: 1;
-      height: 2px;
-      background: #e8f5e9;
-    }
-
-    /* ── STATS ROW ── */
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-bottom: 8px;
-    }
-
-    .stat-card {
-      background: #f9fdf9;
-      border: 1.5px solid #d4edda;
-      border-radius: 14px;
-      padding: 18px 14px;
-      text-align: center;
-    }
-
-    .stat-card .stat-emoji {
-      font-size: 22px;
-      margin-bottom: 8px;
-    }
-
-    .stat-card .stat-value {
-      font-size: 24px;
-      font-weight: 900;
-      color: #1a1a1a;
-      letter-spacing: -0.5px;
-    }
-
-    .stat-card .stat-label {
-      font-size: 11px;
-      color: #5a7a5a;
-      margin-top: 4px;
-      line-height: 1.4;
-    }
-
-    .stat-card .stat-source {
-      display: inline-block;
-      margin-top: 8px;
-      font-size: 10px;
-      font-weight: 600;
-      color: #2CA01C;
-      text-decoration: none;
-    }
-
-    .stat-card .stat-source:hover {
-      text-decoration: underline;
-    }
-
-    /* ── CARDS ── */
-    .card {
-      background: #ffffff;
-      border: 1.5px solid #e8e8e8;
-      border-radius: 14px;
-      padding: 22px 24px;
-      margin-bottom: 12px;
-      transition: box-shadow 0.2s, border-color 0.2s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card:hover {
-      box-shadow: 0 4px 16px rgba(44,160,28,0.10);
-      border-color: #b2dfb0;
-    }
-
-    .card.internal {
-      background: #f9fdf9;
-      border-color: #c8e6c9;
-    }
-
-    .card.internal:hover {
-      box-shadow: 0 4px 16px rgba(44,160,28,0.12);
-      border-color: #81c784;
-    }
-
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 4px; height: 100%;
-      background: #e0e0e0;
-      border-radius: 14px 0 0 14px;
-    }
-
-    .card.internal::before {
-      background: #2CA01C;
-    }
-
-    .card-top {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      margin-bottom: 10px;
-    }
-
-    .emoji-icon {
-      font-size: 26px;
-      line-height: 1;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    .card-meta { flex: 1; }
-
-    .tag {
-      display: inline-block;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      padding: 3px 9px;
-      border-radius: 20px;
-      margin-bottom: 6px;
-      background: #e3f2fd;
-      color: #1565c0;
-    }
-
-    .tag.internal {
-      background: #e8f5e9;
-      color: #2CA01C;
-    }
-
-    .card h2 {
-      font-size: 16px;
-      font-weight: 700;
-      color: #1a1a1a;
-      line-height: 1.35;
-    }
-
-    .card p {
-      font-size: 14px;
-      line-height: 1.75;
-      color: #444444;
-      margin-top: 8px;
-    }
-
-    .read-more {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      margin-top: 12px;
-      font-size: 12px;
-      font-weight: 700;
-      color: #2CA01C;
-      text-decoration: none;
-    }
-
-    .read-more:hover {
-      text-decoration: underline;
-    }
-
-    /* ── NUMBER BADGE ── */
-    .num-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
-      background: #FFE01B;
-      color: #1a1a1a;
-      font-size: 13px;
-      font-weight: 900;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    /* ── ARCHIVE ── */
-    .archive-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 16px;
-    }
-
-    .archive-item {
-      background: #f9fdf9;
-      border: 1.5px solid #c8e6c9;
-      border-radius: 12px;
-      padding: 14px 16px;
-      text-decoration: none;
-      transition: box-shadow 0.2s, border-color 0.2s;
-      display: block;
-    }
-
-    .archive-item:hover {
-      box-shadow: 0 2px 10px rgba(44,160,28,0.12);
-      border-color: #81c784;
-    }
-
-    .archive-item.coming-soon {
-      opacity: 0.4;
-      cursor: default;
-      pointer-events: none;
-      background: #f5f5f5;
-      border-color: #e0e0e0;
-    }
-
-    .archive-item .archive-month {
-      font-size: 13px;
-      font-weight: 700;
-      color: #1a1a1a;
-      margin-bottom: 2px;
-    }
-
-    .archive-item .archive-year {
-      font-size: 11px;
-      color: #777;
-    }
-
-    .archive-item .archive-badge {
-      display: inline-block;
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      padding: 2px 7px;
-      border-radius: 20px;
-      margin-top: 7px;
-    }
-
-    .archive-item .archive-badge.current {
-      background: #FFE01B;
-      color: #1a1a1a;
-    }
-
-    .archive-item .archive-badge.soon {
-      background: #eeeeee;
-      color: #999;
-    }
-
-    /* ── FOOTER ── */
-    .footer {
-      background: #1a1a1a;
-      border-radius: 16px;
-      margin-top: 24px;
-      padding: 28px 40px;
-      text-align: center;
-    }
-
-    .footer p {
-      font-size: 12px;
-      color: #888;
-      letter-spacing: 0.5px;
-    }
-
-    .footer .channels {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 14px;
-    }
-
-    .footer .channel-pill {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: #aaa;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 5px 12px;
-      border-radius: 20px;
-    }
-  </style>
-</head>
-<body>
-  <div class="wrapper">
-
-    <!-- Header -->
-    <div class="header">
-      <div class="pill">📡 Monthly Newsletter</div>
-      <h1>Programmatic <span>Pulse</span></h1>
-      <p class="date">April 2026</p>
-      <p class="byline">Latest prog paid media updates brought to you by Carolyn, Danny, Marjorie and Chris! 🎉</p>
-      <div class="divider"></div>
-    </div>
-
-    <div class="body">
-
-      <!-- Stats -->
-      <div class="section-label">📊 By the Numbers</div>
-      <div class="stats-row">
-        <div class="stat-card">
-          <div class="stat-emoji">💰</div>
-          <div class="stat-value">$203B</div>
-          <div class="stat-label">U.S. programmatic ad spend in 2026</div>
-          <a class="stat-source" href="https://www.emarketer.com/content/programmatic-advertising-forecast-trends-h1-2026" target="_blank">Source: eMarketer →</a>
-        </div>
-        <div class="stat-card">
-          <div class="stat-emoji">📺</div>
-          <div class="stat-value">47.5%</div>
-          <div class="stat-label">of U.S. TV viewing time on streaming</div>
-          <a class="stat-source" href="https://adsmanager.paramount.com/insights/ctv-advertising-news-trends" target="_blank">Source: Nielsen / Paramount →</a>
-        </div>
-        <div class="stat-card">
-          <div class="stat-emoji">📈</div>
-          <div class="stat-value">91.5%</div>
-          <div class="stat-label">of digital display spend is programmatic</div>
-          <a class="stat-source" href="https://www.publift.com/blog/programmatic-advertising-trends" target="_blank">Source: Publift →</a>
-        </div>
-      </div>
-
-      <!-- Internal Updates -->
-      <div class="section-label">🏢 Inside Intuit</div>
-
-      <div class="card internal">
-        <div class="card-top">
-          <div class="emoji-icon">🆓</div>
-          <div class="card-meta">
-            <span class="tag internal">Internal Launch</span>
-            <h2>QB Free Programmatic Campaign Goes Live on DV360</h2>
-          </div>
-        </div>
-        <p>The Programmatic team launched its first-ever media campaign supporting the new QuickBooks Free SKU. Running on DV360 with Display (video on the horizon), the $250K campaign targets Custom Intent segments for SMBs, Solopreneurs, and Early Start businesses. The flight runs 4/9–4/30 via Initiative/Kinesso. Learnings will directly inform the monetization and growth blueprint heading into Q4.</p>
-      </div>
-
-      <div class="card internal">
-        <div class="card-top">
-          <div class="emoji-icon">🧪</div>
-          <div class="card-meta">
-            <span class="tag internal">Internal Test</span>
-            <h2>CM360 Creative Optimization A/B Test Now Live in DV360 Prospecting</h2>
-          </div>
-        </div>
-        <p>The team launched a $45K A/B test evaluating CM360 Optimized Rotation vs. Even Rotation across DV360 Prospecting (Display + Video), running 4/6–4/30. The test uses ML-driven creative weighting optimized toward Engaged Site Visit, with a success threshold of 15% improvement in CPeSV. If it wins, Optimized Rotation could become the new default for Standard Display + Video creative management at QuickBooks.</p>
-      </div>
-
-      <div class="card internal">
-        <div class="card-top">
-          <div class="emoji-icon">💰</div>
-          <div class="card-meta">
-            <span class="tag internal">Deep Dive · QB</span>
-            <h2>Amazon DSP Value-Based Bidding A/B Test Underway</h2>
-          </div>
-        </div>
-        <p>QuickBooks is an initial beta tester for Amazon's newly introduced Value-Based Bidding (VBB) — a methodology that incorporates conversion revenue (based on average LTR) into automated bid optimization, reducing reliance on manual adjustments. The $240K A/B test (3/27–4/30) splits Amazon 2P in-market audiences across the current CPA/conversion-volume model vs. the new VBB approach. Intuit QB has been credited as a key driver in getting this capability developed. A positive outcome would align Amazon's setup with existing VBB configurations already live in DV360 and The Trade Desk.</p>
-      </div>
-
-      <div class="card internal">
-        <div class="card-top">
-          <div class="emoji-icon">🎯</div>
-          <div class="card-meta">
-            <span class="tag internal">Deep Dive · QB Prospecting</span>
-            <h2>Programmatic Scale & Efficiency: CPeSV Holding Strong at $7.25</h2>
-          </div>
-        </div>
-        <p>QB MoF Prospecting programmatic spend grew 18% WoW with CPeSV steady at $7.25 — well below the $14 benchmark. Traffic quality spiked significantly, driving an 18% increase in Engaged Site Visits despite a slight dip in overall visit volume. The team is actively shifting budget away from high-cost competitor audiences (which spiked to $43.56 CPeSV) and reallocating to higher-efficiency segments like Amazon Seller Central Lookalikes, delivering a standout $1.57 CPeSV.</p>
-      </div>
-
-      <div class="card internal">
-        <div class="card-top">
-          <div class="emoji-icon">🔄</div>
-          <div class="card-meta">
-            <span class="tag internal">Deep Dive · MC Programmatic</span>
-            <h2>Mailchimp Prog Structure Revert Stabilizes Performance Across All Tactics</h2>
-          </div>
-        </div>
-        <p>Following a structural revert on 4/13, Mailchimp's programmatic campaigns have stabilized back to historic levels with every tactic moving in the right direction simultaneously. Demand Gen MOF recorded its highest CPeSV QTD, while Display BOF led efficiency with CPM down 70% and CPPSU down 60% vs. Week 35 — at higher investment levels. The consolidation exit from learning phase has also allowed video investment to shift into display inventory, improving overall campaign efficiency heading into Q4.</p>
-      </div>
-
-      <!-- Industry Headlines -->
-      <div class="section-label">🌐 Industry Headlines</div>
-
-      <div class="card">
-        <div class="card-top">
-          <div class="num-badge">1</div>
-          <div class="card-meta">
-            <span class="tag">Governance</span>
-            <h2>🏛️ IAB Tech Lab Forms $200B Programmatic Governance Council</h2>
-          </div>
-        </div>
-        <p>IAB Tech Lab launched the Programmatic Governance Council on April 21, uniting buyers, sellers, and platforms to improve auction transparency and transaction signal consistency across the $200B+ U.S. programmatic market. Clearer guidelines expected within 6–12 months.</p>
-        <a class="read-more" href="https://www.prnewswire.com/news-releases/iab-tech-lab-launches-industry-council-to-address-transparency-in-200b-us-programmatic-ad-market-302748778.html" target="_blank">Read more →</a>
-      </div>
-
-      <div class="card">
-        <div class="card-top">
-          <div class="num-badge">2</div>
-          <div class="card-meta">
-            <span class="tag">CTV · Measurement</span>
-            <h2>💳 PayPal Ads Brings Closed-Loop Attribution to CTV</h2>
-          </div>
-        </div>
-        <p>PayPal launched Curated Ads on April 22, enabling purchase-confirmed attribution for CTV campaigns traced directly to confirmed PayPal transactions — a major step forward in CTV measurement.</p>
-        <a class="read-more" href="https://newsroom.paypal-corp.com/2026-04-22-PayPal-Ads-Brings-Purchase-Attribution-to-Connected-TV-Through-PayPal-Curated-Ads" target="_blank">Read more →</a>
-      </div>
-
-      <div class="card">
-        <div class="card-top">
-          <div class="num-badge">3</div>
-          <div class="card-meta">
-            <span class="tag">CTV · Measurement</span>
-            <h2>📊 IAS Launches "Linear-Like" CTV Measurement</h2>
-          </div>
-        </div>
-        <p>Integral Ad Science's new IAS Total TV (April 27) delivers show-, genre-, and program-level transparency across Amazon Prime Video, Disney, NBCUniversal, and Paramount — bringing linear-grade reporting to streaming for the first time.</p>
-        <a class="read-more" href="https://www.marketingdive.com/news/ias-touts-linear-like-transparency-with-ctv-ad-measurement-solutions/818502/" target="_blank">Read more →</a>
-      </div>
-
-      <div class="card">
-        <div class="card-top">
-          <div class="num-badge">4</div>
-          <div class="card-meta">
-            <span class="tag">DSP · Retail Media</span>
-            <h2>🔁 The Trade Desk Integrates DSP Into Skai & Pacvue</h2>
-          </div>
-        </div>
-        <p>TTD is embedding its DSP directly within retail media platforms Skai and Pacvue, letting buyers activate programmatic display and video alongside retail media in a single interface — a notable step toward cross-channel consolidation.</p>
-        <a class="read-more" href="https://www.adexchanger.com/commerce/the-trade-desk-makes-its-dsp-available-within-skai-and-pacvue/" target="_blank">Read more →</a>
-      </div>
-
-      <div class="card">
-        <div class="card-top">
-          <div class="num-badge">5</div>
-          <div class="card-meta">
-            <span class="tag">CTV · Supply</span>
-            <h2>👀 Meta Quietly Building CTV Ad Infrastructure</h2>
-          </div>
-        </div>
-        <p>Meta has been holding exploratory meetings with SSPs including Magnite and FreeWheel since early 2025, laying the groundwork for a CTV push. A Meta entry into streaming supply would be a seismic shift for the programmatic ecosystem.</p>
-        <a class="read-more" href="https://digiday.com/future-of-tv/meta-eyes-ctv-expansion-to-fuel-its-next-wave-of-ad-growth/" target="_blank">Read more →</a>
-      </div>
-
-      <!-- Archive -->
-      <div class="section-label">🗂️ Archive</div>
-
-      <div class="archive-grid">
-        <a class="archive-item" href="programmatic-pulse-april-2026.html">
-          <div class="archive-month">April 2026</div>
-          <div class="archive-year">2026</div>
-          <span class="archive-badge current">✦ Current</span>
-        </a>
-        <div class="archive-item coming-soon">
-          <div class="archive-month">March 2026</div>
-          <div class="archive-year">2026</div>
-          <span class="archive-badge soon">Coming Soon</span>
-        </div>
-        <div class="archive-item coming-soon">
-          <div class="archive-month">February 2026</div>
-          <div class="archive-year">2026</div>
-          <span class="archive-badge soon">Coming Soon</span>
-        </div>
-        <div class="archive-item coming-soon">
-          <div class="archive-month">January 2026</div>
-          <div class="archive-year">2026</div>
-          <span class="archive-badge soon">Coming Soon</span>
-        </div>
-        <div class="archive-item coming-soon">
-          <div class="archive-month">December 2025</div>
-          <div class="archive-year">2025</div>
-          <span class="archive-badge soon">Coming Soon</span>
-        </div>
-        <div class="archive-item coming-soon">
-          <div class="archive-month">November 2025</div>
-          <div class="archive-year">2025</div>
-          <span class="archive-badge soon">Coming Soon</span>
-        </div>
-      </div>
-
-    </div><!-- end .body -->
-
-    <!-- Footer -->
-    <div class="footer">
-      <p>Programmatic Pulse &nbsp;·&nbsp; April 2026 &nbsp;·&nbsp; Intuit Marketing Services</p>
-      <div class="channels">
-        <span class="channel-pill">📺 CTV</span>
-        <span class="channel-pill">🖥️ Display</span>
-        <span class="channel-pill">🎬 Video</span>
-        <span class="channel-pill">📍 DOOH</span>
-        <span class="channel-pill">⚙️ DSP / SSP</span>
-        <span class="channel-pill">🤖 Ad Tech</span>
-      </div>
-    </div>
-
-  </div>
-</body>
-</html>
+📡 MONTHLY NEWSLETTER
+Programmatic Pulse
+April 2026
+Latest prog paid media updates brought to you by Carolyn, Danny, Marjorie and Chris! 🎉
+
+📊 BY THE NUMBERS
+💰
+$203B
+U.S. programmatic ad spend in 2026
+Source: eMarketer →
+📺
+47.5%
+of U.S. TV viewing time on streaming
+Source: Nielsen / Paramount →
+📈
+91.5%
+of digital display spend is programmatic
+Source: Publift →
+🏢 INSIDE INTUIT
+🆓
+INTERNAL LAUNCH
+QB Free Programmatic Campaign Goes Live on DV360
+		What happened: The Programmatic team launched its first-ever media campaign supporting QB Free on DV360 Display ($250K · 4/9–4/30 · Initiative/Kinesso), targeting SMBs, Solopreneurs, and Early Start businesses via Custom Intent segments
+		Why it matters: First foray into supporting this new SKU programmatically — learnings will directly shape the Q4 monetization and growth blueprint
+		Other notable details: Video inventory is on the horizon; campaign scope expected to evolve as foundational understanding builds
+🧪
+INTERNAL TEST
+CM360 Creative Optimization A/B Test Now Live in DV360 Prospecting
+		What happened: Launched a $45K A/B test on DV360 Prospecting (Display + Video · 4/6–4/30) comparing CM360 Optimized Rotation (ML-driven, optimized to Engaged Site Visit) vs. Even Rotation
+		Why it matters: Even rotation can waste spend on lower-performing creatives once gaps emerge — this test evaluates whether automated optimization can reduce waste and improve CPeSV by 15%+
+		Other notable details: If Optimized Rotation wins, it becomes the new default for Standard Display + Video creative management across QuickBooks
+💰
+DEEP DIVE · QB
+Amazon DSP Value-Based Bidding A/B Test Underway
+		What happened: Launched a $240K A/B test (3/27–4/30) on Amazon Ads comparing Value-Based Bidding (VBB) — which optimizes toward conversion revenue based on avg. LTR — vs. the current CPA/conversion-volume model, split across Amazon 2P in-market audiences
+		Why it matters: VBB reduces reliance on manual budget optimizations and improves ROAS by letting the platform bid up/down based on predicted customer value
+		Other notable details: Intuit QB is credited as a key driver in getting this Amazon capability built — we're an initial beta tester; a positive outcome aligns Amazon with existing VBB setups already live in DV360 and The Trade Desk
+🎯
+DEEP DIVE · QB PROSPECTING
+Programmatic Scale & Efficiency: CPeSV Holding Strong at $7.25
+		What happened: Programmatic spend grew 18% WoW with CPeSV holding at $7.25 — well below the $14 benchmark — while Engaged Site Visits increased 18% despite a slight dip in overall visit volume
+		Why it matters: Traffic quality is improving even as overall volume dips, signaling smarter spend allocation and more efficient audience targeting
+		Other notable details: Budget is actively shifting away from high-cost competitor audiences ($43.56 CPeSV) toward Amazon Seller Central Lookalikes, delivering a standout $1.57 CPeSV
+🔄
+DEEP DIVE · MC PROGRAMMATIC
+Mailchimp Prog Structure Revert Stabilizes Performance Across All Tactics
+		What happened: Following a structural revert on 4/13, all Mailchimp programmatic tactics stabilized back to historic levels simultaneously — Demand Gen MOF hit its highest CPeSV QTD, and Display BOF saw CPM down 70% and CPPSU down 60% vs. Week 35 at higher investment
+		Why it matters: The revert confirmed the prior structure change was the root cause of performance degradation — restoring it unlocked efficiency gains across every tactic at once
+		Other notable details: As Demand Gen exited the learning phase, video investment shifted into Display inventory, further improving overall campaign efficiency heading into Q4
+🌐 INDUSTRY HEADLINES
+1
+GOVERNANCE
+🏛️ IAB Tech Lab Forms $200B Programmatic Governance Council
+IAB Tech Lab launched the Programmatic Governance Council on April 21, uniting buyers, sellers, and platforms to improve auction transparency and transaction signal consistency across the $200B+ U.S. programmatic market. Clearer guidelines expected within 6–12 months.
+Read more →
+2
+CTV · MEASUREMENT
+💳 PayPal Ads Brings Closed-Loop Attribution to CTV
+PayPal launched Curated Ads on April 22, enabling purchase-confirmed attribution for CTV campaigns traced directly to confirmed PayPal transactions — a major step forward in CTV measurement.
+Read more →
+3
+CTV · MEASUREMENT
+📊 IAS Launches "Linear-Like" CTV Measurement
+Integral Ad Science's new IAS Total TV (April 27) delivers show-, genre-, and program-level transparency across Amazon Prime Video, Disney, NBCUniversal, and Paramount — bringing linear-grade reporting to streaming for the first time.
+Read more →
+4
+DSP · RETAIL MEDIA
+🔁 The Trade Desk Integrates DSP Into Skai & Pacvue
+TTD is embedding its DSP directly within retail media platforms Skai and Pacvue, letting buyers activate programmatic display and video alongside retail media in a single interface — a notable step toward cross-channel consolidation.
+Read more →
+5
+CTV · SUPPLY
+👀 Meta Quietly Building CTV Ad Infrastructure
+Meta has been holding exploratory meetings with SSPs including Magnite and FreeWheel since early 2025, laying the groundwork for a CTV push. A Meta entry into streaming supply would be a seismic shift for the programmatic ecosystem.
+Read more →
+🗂️ ARCHIVE
+April 2026
+2026
+✦ CURRENT
+March 2026
+2026
+COMING SOON
+February 2026
+2026
+COMING SOON
+January 2026
+2026
+COMING SOON
+December 2025
+2025
+COMING SOON
+November 2025
+2025
+COMING SOON
+Programmatic Pulse  ·  April 2026  ·  Intuit Marketing Services
+📺 CTV
+🖥️ Display
+🎬 Video
+📍 DOOH
+⚙️ DSP / SSP
+🤖 Ad Tech
